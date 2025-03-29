@@ -1,5 +1,5 @@
 from flask import Blueprint
-import app.forms as forms
+from . import forms
 
 from flask import render_template
 from flask import url_for
