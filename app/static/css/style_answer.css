@@ -1,0 +1,11 @@
+h2 {
+    color: grey;
+    margin-left: 20px;
+}
+
+.answer_item {
+    font-family: serif;
+    margin: 20px;
+    font-size: 20px;
+    font-weight: 600;
+}

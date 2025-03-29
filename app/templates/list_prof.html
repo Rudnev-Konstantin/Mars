@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if sp_style == "None"%}
+        <h4 
+            class="text-danger">Неверно указан тип списка. Типы: ul или ol
+        </h4>
+    {% else %}
+        <h2>Список профессий</h2>
+        <{{ sp_style }}>
+            {% for item in list_prof %}
+                <li> {{ item }} </li>
+            {% endfor %}
+        </{{ sp_style }}>
+    {% endif %}
+{% endblock %}

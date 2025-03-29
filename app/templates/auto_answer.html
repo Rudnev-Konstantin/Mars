@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block add_head %}
+    <link 
+        rel="stylesheet"
+        href="{{ style_path }}"
+     />
+{% endblock %}
+
+{% block content %}
+    <div class="answer_item">Фамилия: {{ user_data["surname"] }}</div>
+    <div class="answer_item">Имя: {{ user_data["name"] }}</div>
+    <div class="answer_item">Образование: {{ user_data["education"] }}</div>
+    <div class="answer_item">Профессия: {{ user_data["profession"] }}</div>
+    <div class="answer_item">Пол: {{ user_data["sex"] }}</div>
+    <div class="answer_item">Мотивация: {{ user_data["motivation"] }}</div>
+    <div class="answer_item">
+        готовы остаться на Марсе? {{ user_data["ready"] }}
+    </div>
+{% endblock %}

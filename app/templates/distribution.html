@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2 class="text-center">Размещение по каютам</h2>
+
+    {% set cabin = "Каюта №" %}
+    {% for item in sp_astronauts %}
+        <p>{{ item }} - {{ cabin }} {{ loop.index }} {{"- капитан корабля" if loop.first else ""}} </p>
+    {% endfor %}
+{% endblock content %}

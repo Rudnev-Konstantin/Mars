@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block add_head %}
+    <link 
+        rel="stylesheet"
+        href="{{ style_path }}"
+     />
+{% endblock add_head %}
+
+{% block content %}
+    <h2 class="text-center">Оформление каюты</h2>
+
+    <table>
+        <tr>
+            <th class="text-center">Цвет стен</th>
+            <th class="text-center">Эмблема</th>
+        </tr>
+        <tr>
+            <td style="background-color: {{ color }};"></td>
+            <td>
+                <img
+                src="{{ image_path }}"
+                alt="здесь должна была быть картинка, но не нашлась"
+                />
+            </td>
+        </tr>
+    </table>
+{% endblock content %}
