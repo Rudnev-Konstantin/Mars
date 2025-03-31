@@ -1,5 +1,8 @@
-from flask import Blueprint
+from flask import Blueprint, current_app
 from . import forms
+
+from sqlalchemy.orm import joinedload
+from .data.models.jobs import Jobs
 
 from flask import render_template
 from flask import url_for
@@ -112,4 +115,38 @@ def table(gender, age):
         color = "rgba" + str(tuple(color + [transparent])),
         style_path=url_for("static", filename="css/style_table.css"),
         image_path = martian
+    )
+
+@bp.route("/works_log")
+def works_log():
+    with current_app.bd_connect.get_session() as session:
+        jobs = session.query(Jobs).options(joinedload(Jobs.user)).all()
+    
+    models_struct_data = {
+        "table_titles": [
+            "Title of activity",
+            "Team leader",
+            "Duration",
+            "List of collaborations",
+            "is finished"
+        ],
+        "jobs": []
+    }
+    
+    for job in jobs:
+        job_struct = list()
+        
+        job_struct.append(job.id)
+        job_struct.append(job.job)
+        job_struct.append(job.user.surname + ' ' + job.user.name)
+        job_struct.append(str(job.work_size) + " hours")
+        job_struct.append(job.collaborators)
+        job_struct.append("is finished" if job.is_finished else "is not finished")
+        
+        models_struct_data["jobs"].append(job_struct)
+    
+    return render_template(
+        "works_log.html",
+        data_jobs=models_struct_data,
+        style_path=url_for("static", filename="css/style_table.css")
     )

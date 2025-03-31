@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block add_head %}
+    <link 
+        rel="stylesheet"
+        href="{{ style_path }}"
+    />
+{% endblock add_head %}
+
+{% block content %}
+    <h2 class="text-center">Works log</h2>
+    
+    {% for job in data_jobs["jobs"] %}
+        <div style="margin-bottom: 50px;">
+            <h3>Action # {{ job[0] }}</h3>
+            <table>
+                <tr>
+                    {% for item in data_jobs["table_titles"] %}
+                        <th class="text-center">{{item}}</th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for item in job[1:-1] %}
+                        <th class="text-center" style="background-color: rgb(255, 193, 164);">
+                            {{item}}
+                        </th>
+                    {% endfor %}
+                    {% if "not" in job[-1] %}
+                        <th class="text-center" style="background-color: rgb(252, 92, 129);">
+                            {{job[-1]}}
+                        </th>
+                    {% else %}
+                        <th class="text-center" style="background-color: rgb(108, 252, 92);">
+                            {{job[-1]}}
+                        </th>
+                    {% endif %}
+                </tr>
+            </table>
+        </div>
+    {% endfor %}
+{% endblock content %}

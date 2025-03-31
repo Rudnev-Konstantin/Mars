@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block add_head %}
+    <style>
+        th {
+            background-color: rgb(235, 235, 235);
+            width: 50%;
+            padding: 10px;
+        }
+    </style>
+{% endblock add_head %}
+
+{% block content %}
+    {% for obj in objects %}
+        <table>
+            <tr>
+                {% set values = [] %}
+                {% for attr in obj.__dict__ %}
+                    {% if not (obj|attr(attr) is callable)
+                        and not (attr.startswith("__") or attr.startswith("_"))
+                    %}
+                        {% set _ = values.append(obj|attr(attr)) %}
+                        <th class="text-center">{{ attr }}</th>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for attr_value in values %}
+                    <th class="text-center" style="background-color: rgb(255, 193, 164);">
+                        {{ attr_value }}
+                    </th>
+                {% endfor %}
+            </tr>
+        </table>
+    {% endfor %}
+{% endblock content %}
