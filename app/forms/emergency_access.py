@@ -8,12 +8,12 @@ class EmergencyAccessForm(FlaskForm):
     password_astronaut = PasswordField(
         'Пароль Астронавта',
         validators=[DataRequired()]
-        )
+    )
     
     id_captain = StringField('id Капитана', validators=[DataRequired()])
     password_captain = PasswordField(
         'Пароль Капитана',
         validators=[DataRequired()]
-        )
+    )
     
     submit = SubmitField('Войти')

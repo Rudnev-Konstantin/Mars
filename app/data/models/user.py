@@ -1,11 +1,12 @@
 from ..db import Declarative_Base
+from flask_login import UserMixin
 from sqlalchemy import Column, orm
 from sqlalchemy import Integer, String, DateTime
 
 import datetime
 
 
-class User(Declarative_Base):
+class User(Declarative_Base, UserMixin):
     __tablename__ = 'users'
     
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -28,3 +29,6 @@ class User(Declarative_Base):
     
     def __repr__(self):
         return f"<Colonist> {self.id} {self.surname} {self.name}"
+    
+    def check_password(self, password):
+        return self.hashed_password == password

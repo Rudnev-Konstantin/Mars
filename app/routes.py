@@ -1,11 +1,16 @@
 from flask import Blueprint, current_app
-from . import forms
 
 from sqlalchemy.orm import joinedload
+from .data.models.user import User
 from .data.models.jobs import Jobs
 
-from flask import render_template
-from flask import url_for
+from flask_login import current_user, login_required, login_user, logout_user
+
+from .forms.emergency_access import EmergencyAccessForm
+from .forms.login import LoginForm
+from .forms.register import RegisterForm
+
+from flask import render_template, url_for, redirect
 
 
 bp = Blueprint('main', __name__)
@@ -72,9 +77,9 @@ def answer():
         user_data=user_data
     )
 
-@bp.route("/login", methods=['GET', 'POST'])
+@bp.route("/login_emergency_access.py", methods=['GET', 'POST'])
 def emergency_access_form():
-    form = forms.EmergencyAccessForm()
+    form = EmergencyAccessForm()
     
     if form.validate_on_submit():
         return "<h1>Форма отправлена</h1>"
@@ -150,3 +155,31 @@ def works_log():
         data_jobs=models_struct_data,
         style_path=url_for("static", filename="css/style_table.css")
     )
+
+@bp.route("/register", methods=['GET', 'POST'])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        return redirect('/')
+    return render_template("forms/register.html", title="Регистрация", form=form)
+
+@bp.route("/login", methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        with current_app.bd_connect.get_session() as session:
+            user = session.query(User).filter(User.email == form.email.data).first()
+        
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            return redirect('/')
+        return render_template("forms/login.html",
+                               message="Неправильный логин или пароль",
+                               form=form)
+    return render_template("forms/login.html", title="Авторизация", form=form)
+
+@bp.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
