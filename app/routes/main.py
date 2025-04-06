@@ -1,15 +1,14 @@
 from flask import Blueprint, current_app
 
 from sqlalchemy.orm import joinedload
-from .data.models.user import User
-from .data.models.jobs import Jobs
+from ..data.models.user import User
+from ..data.models.jobs import Jobs
 
 from flask_login import current_user, login_required, login_user, logout_user
 
-from .forms.emergency_access import EmergencyAccessForm
-from .forms.login import LoginForm
-from .forms.register import RegisterForm
-from .forms.add_job import AddJob
+from ..forms.login import LoginForm
+from ..forms.register import RegisterForm
+from ..forms.add_job import AddJob
 
 from flask import render_template, url_for, redirect
 
@@ -53,87 +52,6 @@ def index(title=''):
         title=title,
         data_jobs=models_struct_data,
         style_path=url_for("static", filename="css/style_table.css")
-    )
-
-@bp.route("/training/<prof>")
-def training(prof):
-    if "инженер" in prof or "строитель" in prof:
-        prof_type = "engineering"
-    else:
-        prof_type = "ology"
-    
-    return render_template(
-        "training.html",
-        title="training",
-        image_path=url_for("static", filename="images/MARS-2-2.png"),
-        prof=prof_type
-    )
-
-@bp.route("/list_prof/<sp_style>")
-def list_prof(sp_style):
-    list_prof = [
-        "пилот",
-        "строитель",
-        "врач",
-    ]
-    
-    if sp_style not in {"ol", "ul"}:
-        sp_style = "None"
-    
-    return render_template(
-        "list_prof.html",
-        sp_style=sp_style,
-        list_prof=list_prof
-    )
-
-@bp.route("/auto_answer")
-@bp.route("/answer")
-def answer():
-    user_data = {
-        "surname": "Watny",
-        "name": "Mark",
-        "education": "выше среднего",
-        "profession": "штурман марсохода",
-        "sex": "male",
-        "motivation": " Всегда мечтал застрять на Марсе!",
-        "ready": True,
-    }
-    
-    return render_template(
-        "auto_answer.html",
-        title="Анкета",
-        style_path=url_for("static", filename="css/style_answer.css"),
-        user_data=user_data
-    )
-
-@bp.route("/login_emergency_access.py", methods=['GET', 'POST'])
-def emergency_access_form():
-    form = EmergencyAccessForm()
-    
-    if form.validate_on_submit():
-        return "<h1>Форма отправлена</h1>"
-    return render_template(
-        "forms/emergency_access.html",
-        title="Аварийный доступ",
-        form=form,
-        emblem_path=url_for("static", filename="images/MARS-2-7.png")
-        )
-
-@bp.route("/distribution")
-def distribution():
-    sp_astronauts = [
-        "Ридли Скотт",
-        "Энди Уир",
-        "Марк Уотни",
-        "Венката Капур",
-        "Тедди Сандерс",
-        "Шон Бин",
-        "Кто-то Ещё"
-    ]
-    
-    return render_template(
-        "distribution.html",
-        sp_astronauts=sp_astronauts
     )
 
 @bp.route("/table/<gender>/<int:age>")

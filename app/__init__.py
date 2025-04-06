@@ -4,11 +4,11 @@ from .data.db import DataBaseConnect
 from flask_login import LoginManager
 
 
-def create_app(mode="default"):
+def create_app(mode="default", db_cone_url="sqlite:///db/main.sqlite"):
     app = Flask(__name__)
     app.config.from_object(config[mode])
     
-    app.bd_connect = DataBaseConnect("sqlite:///db/main.sqlite")
+    app.bd_connect = DataBaseConnect(db_cone_url)
     app.bd_connect.create_tables()
     
     login_manager = LoginManager()
@@ -19,7 +19,10 @@ def create_app(mode="default"):
         session = app.bd_connect.get_session()
         return session.query(User).get(user_id)
     
-    from . import routes
-    app.register_blueprint(routes.bp)
+    from .routes.main import bp
+    app.register_blueprint(bp)
+    
+    from .routes.jobs_api import bp
+    app.register_blueprint(bp)
     
     return app
