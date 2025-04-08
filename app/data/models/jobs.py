@@ -1,12 +1,14 @@
 from ..db import Declarative_Base
 from flask_login import UserMixin
+from sqlalchemy_serializer import SerializerMixin
+
 from sqlalchemy import Column, orm
 from sqlalchemy import Integer, String, DateTime, Boolean, ForeignKey
 
 import datetime
 
 
-class Jobs(Declarative_Base, UserMixin):
+class Jobs(Declarative_Base, UserMixin, SerializerMixin):
     __tablename__ = 'jobs'
     
     id = Column(Integer, primary_key=True, autoincrement=True)

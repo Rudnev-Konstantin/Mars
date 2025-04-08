@@ -21,7 +21,7 @@ bp = Blueprint('main', __name__)
 @bp.route("/<title>")
 @bp.route("/index/<title>")
 def index(title=''):
-    with current_app.bd_connect.get_session() as session:
+    with current_app.db_connect.get_session() as session:
         jobs = session.query(Jobs).options(joinedload(Jobs.user)).all()
     
     models_struct_data = {
@@ -73,7 +73,7 @@ def table(gender, age):
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        with current_app.bd_connect.get_session() as session:
+        with current_app.db_connect.get_session() as session:
             user = User()
             user.surname = form.surname.data
             user.name = form.name.data
@@ -84,7 +84,7 @@ def register():
             session.add(user)
             session.commit()
         
-        with current_app.bd_connect.get_session() as session:
+        with current_app.db_connect.get_session() as session:
             user = session.query(User).filter(User.email == form.email.data).first()
             login_user(user, remember=form.remember_me.data)
         
@@ -95,7 +95,7 @@ def register():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        with current_app.bd_connect.get_session() as session:
+        with current_app.db_connect.get_session() as session:
             user = session.query(User).filter(User.email == form.email.data).first()
         
         if user and user.check_password(form.password.data):
@@ -119,7 +119,7 @@ def logout():
 def add_job():
     form = AddJob()
     if form.validate_on_submit():
-        with current_app.bd_connect.get_session() as session:
+        with current_app.db_connect.get_session() as session:
             job = Jobs()
             job.team_leader = form.team_leader_id.data
             job.job = form.job.data
