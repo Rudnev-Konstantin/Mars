@@ -3,7 +3,8 @@ from config import config
 from .data.db import DataBaseConnect
 from flask_login import LoginManager
 
-from flask import request, abort, jsonify
+from flask_restful import Api
+from api.jobs import jobs_api
 
 
 def create_app(mode="default", db_cone_url="sqlite:///db/main.sqlite"):
@@ -24,21 +25,11 @@ def create_app(mode="default", db_cone_url="sqlite:///db/main.sqlite"):
     from .routes.main import bp
     app.register_blueprint(bp)
     
-    from .routes.jobs_api import bp
-    app.register_blueprint(bp)
     
-    @app.errorhandler(404)
-    def not_found(error):
-        if request.path.startswith("/api/"):
-            return jsonify({"error": "Not found",}), 404
-        else:
-            return abort(404)
+    api = Api(app)
     
-    @app.errorhandler(400)
-    def bad_request(error):
-        if request.path.startswith("/api/"):
-            return jsonify({"error": "Not found",}), 400
-        else:
-            return abort(400)
+    api.add_resource(jobs_api.JobsListResource, '/api/jobs') 
+    api.add_resource(jobs_api.JobResource, '/api/jobs/<int:job_id>')
+    
     
     return app

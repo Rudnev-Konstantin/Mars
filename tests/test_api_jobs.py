@@ -16,11 +16,12 @@ def test_job(client):
     
     response = client.get("api/jobs/0")
     assert response.status_code == 404
-    assert response.json["error"] == "Not found"
+    assert "message" in response.json
     
-    response = client.get("api/jobs/str")
-    assert response.status_code == 404
-    assert response.json["error"] == "Not found"
+    invalid_cases = ["abc", "1.5", "-1", "123abc"]
+    for case in invalid_cases:
+        response = client.get(f"api/jobs/{case}")
+        assert response.status_code == 404
 
 def test_create_job(client):
     # Тест успешного создания
@@ -56,3 +57,20 @@ def test_create_job(client):
     }
     response = client.post("/api/jobs", json=invalid_types)
     assert response.status_code == 400
+
+def test_delete_job(client):
+    response = client.delete("api/jobs/1")
+    assert response.status_code == 200
+    assert response.json["success"] == "OK"
+    
+    response = client.get("api/jobs/1")
+    assert response.status_code == 404
+    
+    response = client.delete("api/jobs/0")
+    assert response.status_code == 404
+    assert "message" in response.json
+    
+    invalid_cases = ["abc", "1.5", "-1", "123abc"]
+    for case in invalid_cases:
+        response = client.delete(f"api/jobs/{case}")
+        assert response.status_code == 404
