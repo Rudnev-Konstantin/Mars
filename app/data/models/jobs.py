@@ -25,4 +25,6 @@ class Jobs(Declarative_Base, UserMixin, SerializerMixin):
     
     is_finished = Column(Boolean, default=False)
     
+    is_published = Column(Boolean, default=True)
+    
     user = orm.relationship('User')
