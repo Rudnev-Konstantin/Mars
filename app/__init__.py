@@ -4,7 +4,8 @@ from .data.db import DataBaseConnect
 from flask_login import LoginManager
 
 from flask_restful import Api
-from api.jobs import jobs_api
+from api.jobs import jobs_resource
+from api.users import users_resource
 
 
 def create_app(mode="default", db_cone_url="sqlite:///db/main.sqlite"):
@@ -28,8 +29,11 @@ def create_app(mode="default", db_cone_url="sqlite:///db/main.sqlite"):
     
     api = Api(app)
     
-    api.add_resource(jobs_api.JobsListResource, '/api/jobs') 
-    api.add_resource(jobs_api.JobResource, '/api/jobs/<int:job_id>')
+    api.add_resource(jobs_resource.JobsListResource, '/api/jobs') 
+    api.add_resource(jobs_resource.JobResource, '/api/jobs/<int:job_id>')
+    
+    api.add_resource(users_resource.UsersListResource, '/api/users') 
+    api.add_resource(users_resource.UserResource, '/api/users/<int:user_id>')
     
     
     return app
